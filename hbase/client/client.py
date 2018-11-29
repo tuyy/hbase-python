@@ -127,12 +127,14 @@ class ColumnFamilyAttributes(dict):
 
 class Client(object):
 
-    def __init__(self, zkquorum, zk_master_path=None, zk_region_path=None):
+    def __init__(self, zkquorum, zk_master_path, zk_region_path):
         """HBase client.
 
         Args:
             zkquorum (str): Zookeeper quorum. Comma-separated list of hosts to connect to.
                 e.g., '127.0.0.1:2181,127.0.0.1:2182,[::1]:2183'
+            zk_master_path
+            zk_region_path
 
         Raises:
             TransportError: Failed to connect.

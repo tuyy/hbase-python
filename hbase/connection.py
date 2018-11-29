@@ -69,7 +69,7 @@ class Threads(object):
 
 class Connection(object):
 
-    def __init__(self, on_close, zkquorum):
+    def __init__(self, on_close, zkquorum, zk_master_path, zk_region_path):
         """Connection.
 
         Args:
@@ -86,7 +86,7 @@ class Connection(object):
         self._on_close = on_close
         self._zkquorum = zkquorum
 
-        self._client = client.Client(zkquorum)
+        self._client = client.Client(zkquorum, zk_master_path, zk_region_path)
         self._namespaces = dict()
 
         self._threads = Threads(conf.num_threads_per_conn, conf.num_tasks_per_conn)
@@ -232,16 +232,20 @@ class Connection(object):
 
 class ConnectionPool(object):
 
-    def __init__(self, zkquorum, max_size=10):
+    def __init__(self, zkquorum, zk_master_path, zk_region_path, max_size=10):
         """Connection pool.
 
         Args:
-            zkquorum (str): Zookeeper quorum. Comma-separated list of hosts to connect to.
+            zkquorum (str, zk_master_path, zk_region_path): Zookeeper quorum. Comma-separated list of hosts to connect to.
                 e.g., '127.0.0.1:2181,127.0.0.1:2182,[::1]:2183'
+            zk_master_path
+            zk_region_path
             max_size (int): Max pool size.
 
         """
         self._zkquorum = zkquorum
+        self._zk_master_path = zk_master_path
+        self._zk_region_path = zk_regiont status_path
         self._max_size = max_size
         self._conns = collections.deque()
 
@@ -255,7 +259,7 @@ class ConnectionPool(object):
         if len(self._conns) > 0:
             return self._conns.pop(0)
         else:
-            return Connection(self._on_conn_close, self._zkquorum)
+            return Connection(self._on_conn_close, self._zkquorum, self._zk_master_path, self._zk_region_path)
 
     def _on_conn_close(self, conn):
         """Callback when connection close.

@@ -19,8 +19,7 @@ from hbase import protobuf as pb
 PATH_MASTER = '/hbase/master'
 PATH_META_REGION = '/hbase/meta-region-server'
 
-
-def get_master(zkquorum, timeout=9, retries=3, zkpath=None):
+def get_master(zkquorum, zkpath=None, timeout=9, retries=3):
     """Get master server address.
 
     Args:
@@ -43,7 +42,7 @@ def get_master(zkquorum, timeout=9, retries=3, zkpath=None):
     return _get_address(zkquorum, zkpath, timeout, retries)
 
 
-def get_region(zkquorum, timeout=9, retries=3, zkpath=None):
+def get_region(zkquorum, zkpath=None, timeout=9, retries=3):
     """Get meta region server address.
 
     Args:
