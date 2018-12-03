@@ -245,7 +245,7 @@ class ConnectionPool(object):
         """
         self._zkquorum = zkquorum
         self._zk_master_path = zk_master_path
-        self._zk_region_path = zk_regiont status_path
+        self._zk_region_path = zk_region_path
         self._max_size = max_size
         self._conns = collections.deque()
 
